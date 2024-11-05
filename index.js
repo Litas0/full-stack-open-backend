@@ -9,7 +9,7 @@ app.use(express.static('dist'))
 
 morgan.token('content', (req,res) => JSON.stringify(req.body))
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :content', {
-  skip: (req, res) =>  req.method != 'POST'
+  skip: (req, res) =>  req.method != 'POST'  && req.method != 'PUT'
 }))
 app.use(cors())
 
@@ -90,6 +90,17 @@ app.post('/api/persons', (request, response) => {
     number: body.number
   }
 
+  persons = persons.concat(person)
+  response.json(person)
+})
+
+app.put('/api/persons/:id', (request, response) => {
+  const body = request.body
+  const person = {
+    id: body.id,
+    name: body.name,
+    number: body.number
+  }
   persons = persons.concat(person)
   response.json(person)
 })
